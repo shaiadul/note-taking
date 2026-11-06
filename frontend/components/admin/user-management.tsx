@@ -80,7 +80,7 @@ export function UserManagement({
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
               User Management
             </h1>
-            <Badge variant="default" className="gap-1 bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20">
+            <Badge variant="default" className="gap-1 bg-amber-500/15 text-amber-600 border-amber-500/20">
               <IconShield className="h-3 w-3" />
               Admin Only
             </Badge>

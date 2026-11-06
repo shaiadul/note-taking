@@ -52,7 +52,7 @@ export function InterestsGroupView({ groups }: InterestsGroupViewProps) {
               <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-border/60">
                 <Badge
                   variant="outline"
-                  className="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20 font-bold capitalize text-xs gap-1.5"
+                  className="bg-indigo-500/10 text-indigo-600 border-indigo-500/20 font-bold capitalize text-xs gap-1.5"
                 >
                   <IconTags className="h-3 w-3" />
                   {group._id}
