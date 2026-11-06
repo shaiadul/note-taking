@@ -29,7 +29,7 @@ export class UserController extends BaseController {
 
   public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const user = await this.userService.getUserById(req.params.id);
+      const user = await this.userService.getUserById(req.params.id, req.user!.userId, req.user!.role);
       this.sendSuccess(res, user, "User retrieved successfully");
     } catch (error) {
       next(error);
@@ -38,7 +38,12 @@ export class UserController extends BaseController {
 
   public updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const user = await this.userService.updateUser(req.params.id, req.body);
+      const user = await this.userService.updateUser(
+        req.params.id,
+        req.user!.userId,
+        req.user!.role,
+        req.body
+      );
       this.sendSuccess(res, user, "User updated successfully");
     } catch (error) {
       next(error);

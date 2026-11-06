@@ -3,7 +3,8 @@ import { IUserRepository } from "../repositories/interfaces/user.repository.inte
 import { CreateUserDTO, UpdateUserDTO } from "../validators/user.validator";
 import { SafeUser } from "../types/user.interface";
 import { IPaginatedResult, IPaginationQuery } from "../types/pagination.interface";
-import { ConflictError, NotFoundError } from "../errors/app-error";
+import { ConflictError, ForbiddenError, NotFoundError } from "../errors/app-error";
+import { UserRole } from "../constants/roles.enum";
 import { PasswordUtil } from "../utils/password.util";
 
 export class UserService implements IUserService {
@@ -28,7 +29,11 @@ export class UserService implements IUserService {
     return userDoc.toJSON() as unknown as SafeUser;
   }
 
-  public async getUserById(id: string): Promise<SafeUser> {
+  public async getUserById(id: string, requesterId: string, requesterRole: UserRole): Promise<SafeUser> {
+    if (requesterRole !== UserRole.ADMIN && requesterId !== id) {
+      throw new ForbiddenError("Access denied: You can only view your own profile");
+    }
+
     const userDoc = await this.userRepository.findById(id);
     if (!userDoc) {
       throw new NotFoundError("User not found");
@@ -45,7 +50,16 @@ export class UserService implements IUserService {
     };
   }
 
-  public async updateUser(id: string, dto: UpdateUserDTO): Promise<SafeUser> {
+  public async updateUser(
+    id: string,
+    requesterId: string,
+    requesterRole: UserRole,
+    dto: UpdateUserDTO
+  ): Promise<SafeUser> {
+    if (requesterRole !== UserRole.ADMIN && requesterId !== id) {
+      throw new ForbiddenError("Access denied: You can only update your own profile");
+    }
+
     const existing = await this.userRepository.findById(id);
     if (!existing) {
       throw new NotFoundError("User not found");
@@ -59,6 +73,10 @@ export class UserService implements IUserService {
     }
 
     const updatePayload: Record<string, unknown> = { ...dto };
+    if (requesterRole !== UserRole.ADMIN) {
+      delete updatePayload.role;
+    }
+
     if (dto.password) {
       updatePayload.password = await PasswordUtil.hash(dto.password);
     }
