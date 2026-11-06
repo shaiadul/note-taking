@@ -122,7 +122,12 @@ export const rateLimiter = async (
 
     next();
   } catch (error) {
-    next(error);
+    if (error instanceof TooManyRequestsError) {
+      next(error);
+      return;
+    }
+    logger.warn({ error: (error as any)?.message }, "Rate limiter upstream issue, failing open");
+    next();
   }
 };
 

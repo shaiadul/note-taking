@@ -6,6 +6,16 @@ import { userEditFormSchema, UserEditFormValues } from "@/lib/schemas";
 import { createUserAction, updateUserAction } from "@/actions/user.actions";
 import { User } from "@/lib/types";
 import { useEffect, useState, useTransition } from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { Button } from "@/components/ui/button";
 import { IconX, IconLoader2 } from "@tabler/icons-react";
 
 interface UserDialogProps {
@@ -78,110 +88,111 @@ export function UserDialog({ isOpen, onClose, userToEdit }: UserDialogProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-xs p-4">
-      <div className="relative w-full max-w-md rounded-2xl border border-muted bg-card p-6 shadow-xl animate-in fade-in zoom-in-95 duration-150">
-        <div className="flex items-center justify-between pb-4 border-b border-muted">
-          <h2 className="text-base font-bold text-primary">
+      <Card className="relative w-full max-w-md border-border shadow-2xl animate-in fade-in zoom-in-95 duration-150 p-0 overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-border">
+          <CardTitle className="text-base font-bold text-foreground">
             {userToEdit ? "Edit User Account" : "Create New User"}
-          </h2>
-          <button
-            type="button"
+          </CardTitle>
+          <Button
+            variant="ghost"
+            size="icon-xs"
             onClick={onClose}
-            className="rounded-lg p-1 text-muted-foreground hover:bg-secondary hover:text-primary transition-colors"
+            className="text-muted-foreground hover:text-foreground"
           >
-            <IconX className="h-5 w-5" />
-          </button>
-        </div>
+            <IconX className="h-4 w-4" />
+          </Button>
+        </CardHeader>
 
         {errorMessage && (
-          <div className="my-3 rounded-lg bg-destructive/10 p-3 text-xs text-destructive">
+          <div className="mx-6 mt-3 rounded-lg bg-destructive/10 p-3 text-xs text-destructive">
             {errorMessage}
           </div>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
-          <div>
-            <label className="block text-xs font-semibold text-primary mb-1">Full Name</label>
-            <input
-              type="text"
-              {...register("name")}
-              placeholder="Jane Doe"
-              className="w-full rounded-lg border border-muted bg-secondary/30 py-2 px-3 text-xs text-primary placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-            {errors.name && <p className="mt-1 text-[11px] text-destructive">{errors.name.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-primary mb-1">Email Address</label>
-            <input
-              type="email"
-              {...register("email")}
-              placeholder="jane@example.com"
-              className="w-full rounded-lg border border-muted bg-secondary/30 py-2 px-3 text-xs text-primary placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-            {errors.email && <p className="mt-1 text-[11px] text-destructive">{errors.email.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-primary mb-1">
-              Password {userToEdit && <span className="font-normal text-muted-foreground">(leave blank to keep current)</span>}
-            </label>
-            <input
-              type="password"
-              {...register("password")}
-              placeholder="••••••••"
-              className="w-full rounded-lg border border-muted bg-secondary/30 py-2 px-3 text-xs text-primary placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-            {errors.password && (
-              <p className="mt-1 text-[11px] text-destructive">{errors.password.message}</p>
-            )}
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-semibold text-primary mb-1">Role</label>
-              <select
-                {...register("role")}
-                className="w-full rounded-lg border border-muted bg-secondary/30 py-2 px-2.5 text-xs text-primary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-primary mb-1">
-                Interests <span className="font-normal text-muted-foreground">(csv)</span>
-              </label>
-              <input
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CardContent className="space-y-4 pt-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">Full Name</label>
+              <Input
                 type="text"
-                {...register("interests")}
-                placeholder="chess, reading"
-                className="w-full rounded-lg border border-muted bg-secondary/30 py-2 px-2.5 text-xs text-primary placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                {...register("name")}
+                placeholder="Jane Doe"
+                className="h-9 text-xs"
               />
+              {errors.name && <p className="text-[11px] text-destructive">{errors.name.message}</p>}
             </div>
-          </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-muted">
-            <button
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">Email Address</label>
+              <Input
+                type="email"
+                {...register("email")}
+                placeholder="jane@example.com"
+                className="h-9 text-xs"
+              />
+              {errors.email && <p className="text-[11px] text-destructive">{errors.email.message}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">
+                Password {userToEdit && <span className="font-normal text-muted-foreground">(leave blank to keep current)</span>}
+              </label>
+              <Input
+                type="password"
+                {...register("password")}
+                placeholder="••••••••"
+                className="h-9 text-xs"
+              />
+              {errors.password && (
+                <p className="text-[11px] text-destructive">{errors.password.message}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-foreground">Role</label>
+                <NativeSelect {...register("role")} className="w-full">
+                  <NativeSelectOption value="user">User</NativeSelectOption>
+                  <NativeSelectOption value="admin">Admin</NativeSelectOption>
+                </NativeSelect>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-foreground">
+                  Interests <span className="font-normal text-muted-foreground">(csv)</span>
+                </label>
+                <Input
+                  type="text"
+                  {...register("interests")}
+                  placeholder="chess, reading"
+                  className="h-8 text-xs"
+                />
+              </div>
+            </div>
+          </CardContent>
+
+          <CardFooter className="justify-end gap-2 border-t border-border pt-3 pb-3">
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               onClick={onClose}
               disabled={isPending}
-              className="rounded-lg border border-muted px-4 py-2 text-xs font-medium text-primary hover:bg-secondary transition-colors"
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
+              size="sm"
               disabled={isPending}
-              className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50 transition-opacity shadow-xs"
+              className="gap-1.5"
             >
               {isPending && <IconLoader2 className="h-3.5 w-3.5 animate-spin" />}
               {userToEdit ? "Update User" : "Create User"}
-            </button>
-          </div>
+            </Button>
+          </CardFooter>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }
-

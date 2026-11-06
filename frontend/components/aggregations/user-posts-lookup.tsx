@@ -3,6 +3,17 @@
 import { useState, useTransition } from "react";
 import { getUserPostsLookupAction, getUserProfileWithPostsAction } from "@/actions/aggregation.actions";
 import { Post, UserWithPostsResult } from "@/lib/types";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { IconArticle, IconSearch, IconLoader2, IconUser, IconCalendar } from "@tabler/icons-react";
 import { formatDistanceToNow } from "date-fns";
 
@@ -43,53 +54,59 @@ export function UserPostsLookup({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-muted bg-card p-5">
-        <div className="flex items-center gap-2 text-primary">
-          <IconArticle className="h-5 w-5 text-emerald-500" />
-          <h2 className="text-base font-bold">Scenario 2: User Posts ($lookup Pipeline)</h2>
-        </div>
-        <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-          Retrieves all posts belonging to a particular user via a{" "}
-          <strong>single aggregation pipeline with a $lookup stage</strong>, supported by an index on{" "}
-          <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-[11px] text-primary">
-            userId: 1, createdAt: -1
-          </code>
-          .
-        </p>
-
-        <div className="mt-4 flex flex-col sm:flex-row items-center gap-3">
-          <div className="relative w-full max-w-md">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
-              <IconUser className="h-4 w-4" />
+      <Card className="border-border">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+              <IconArticle className="h-4 w-4" />
             </div>
-            <input
-              type="text"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              placeholder="Enter MongoDB User ID (e.g., 67...)"
-              className="w-full rounded-lg border border-muted bg-secondary/30 py-2.5 pl-9 pr-3 text-xs text-primary placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            />
+            <div>
+              <CardTitle className="text-base font-bold">Scenario 2: User Posts ($lookup Pipeline)</CardTitle>
+              <CardDescription className="text-xs">
+                Retrieves all posts belonging to a particular user via a{" "}
+                <strong>single aggregation pipeline with a $lookup stage</strong>, supported by an index on{" "}
+                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-foreground">
+                  userId: 1, createdAt: -1
+                </code>
+                .
+              </CardDescription>
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={handleLookup}
-            disabled={isPending || !userId.trim()}
-            className="w-full sm:w-auto flex items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50 transition-opacity shadow-xs"
-          >
-            {isPending ? (
-              <>
-                <IconLoader2 className="h-3.5 w-3.5 animate-spin" />
-                Aggregating...
-              </>
-            ) : (
-              <>
-                <IconSearch className="h-3.5 w-3.5" />
-                Execute $lookup
-              </>
-            )}
-          </button>
-        </div>
-      </div>
+        </CardHeader>
+
+        <CardContent>
+          <div className="flex flex-col sm:flex-row items-center gap-2.5 max-w-lg">
+            <div className="relative w-full">
+              <Input
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                placeholder="Enter MongoDB User ID (e.g. 67...)"
+                className="h-9 text-xs pl-8"
+              />
+              <IconUser className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
+            </div>
+            <Button
+              onClick={handleLookup}
+              disabled={isPending || !userId.trim()}
+              size="sm"
+              className="w-full sm:w-auto h-9 gap-1.5 shrink-0"
+            >
+              {isPending ? (
+                <>
+                  <IconLoader2 className="h-3.5 w-3.5 animate-spin" />
+                  Aggregating...
+                </>
+              ) : (
+                <>
+                  <IconSearch className="h-3.5 w-3.5" />
+                  Execute $lookup
+                </>
+              )}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {errorMessage && (
         <div className="rounded-lg bg-destructive/10 p-4 text-xs font-medium text-destructive">
@@ -98,39 +115,41 @@ export function UserPostsLookup({
       )}
 
       {profile && (
-        <div className="rounded-xl border border-muted bg-secondary/40 p-4 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div>
-            <span className="text-muted-foreground">Author: </span>
-            <span className="font-bold text-primary">{profile.name}</span>{" "}
-            <span className="text-muted-foreground">({profile.email})</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground">Interests:</span>
-            {profile.interests?.map((interest, i) => (
-              <span key={i} className="rounded-md bg-card px-2 py-0.5 text-[10px] font-medium border border-muted">
-                {interest}
-              </span>
-            ))}
-          </div>
-        </div>
+        <Card className="border-border bg-muted/20">
+          <CardContent className="py-3 px-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div>
+              <span className="text-muted-foreground">Author: </span>
+              <span className="font-bold text-foreground">{profile.name}</span>{" "}
+              <span className="text-muted-foreground">({profile.email})</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-muted-foreground text-[11px]">Interests:</span>
+              {profile.interests?.map((interest, i) => (
+                <Badge key={i} variant="outline" className="text-[10px] font-medium bg-card">
+                  {interest}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       {posts.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {posts.map((post) => (
-            <div
-              key={post._id}
-              className="flex flex-col justify-between rounded-xl border border-muted bg-card p-5 shadow-xs"
-            >
-              <div>
-                <h3 className="text-sm font-bold text-primary">{post.title}</h3>
-                <p className="mt-2 text-xs text-muted-foreground whitespace-pre-wrap leading-relaxed">
+            <Card key={post._id} className="border-border/80 flex flex-col justify-between">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-bold text-foreground">
+                  {post.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0 pb-3">
+                <p className="text-xs text-muted-foreground whitespace-pre-wrap leading-relaxed">
                   {post.content}
                 </p>
-              </div>
-
-              <div className="mt-4 flex items-center justify-between pt-3 border-t border-muted/60 text-[11px] text-muted-foreground">
-                <span className="font-medium text-primary">
+              </CardContent>
+              <CardFooter className="py-2.5 px-4 text-[11px] text-muted-foreground justify-between bg-muted/30">
+                <span className="font-medium text-foreground">
                   {post.author?.name || profile?.name || "Author"}
                 </span>
                 <span className="flex items-center gap-1">
@@ -139,12 +158,11 @@ export function UserPostsLookup({
                     ? formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })
                     : "recently"}
                 </span>
-              </div>
-            </div>
+              </CardFooter>
+            </Card>
           ))}
         </div>
       )}
     </div>
   );
 }
-

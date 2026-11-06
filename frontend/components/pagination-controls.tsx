@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Pagination } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 
 interface PaginationControlsProps {
@@ -26,26 +27,26 @@ export function PaginationControls({ pagination }: PaginationControlsProps) {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-2 border-t border-muted">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-2 border-t border-border">
       <div className="text-xs text-muted-foreground">
-        Showing <span className="font-semibold text-primary">{(currentPage - 1) * pagination.limit + 1}</span> to{" "}
-        <span className="font-semibold text-primary">
+        Showing <span className="font-semibold text-foreground">{(currentPage - 1) * pagination.limit + 1}</span> to{" "}
+        <span className="font-semibold text-foreground">
           {Math.min(currentPage * pagination.limit, totalItems)}
         </span>{" "}
-        of <span className="font-semibold text-primary">{totalItems}</span> results
+        of <span className="font-semibold text-foreground">{totalItems}</span> results
       </div>
 
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
+      <div className="flex items-center gap-1.5">
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => navigateToPage(currentPage - 1)}
           disabled={!hasPrevPage}
-          className="inline-flex items-center gap-1 rounded-lg border border-muted bg-card px-3 py-1.5 text-xs font-medium text-primary hover:bg-secondary disabled:opacity-40 disabled:pointer-events-none transition-colors"
-          aria-label="Previous page"
+          className="gap-1 text-xs h-8"
         >
-          <IconChevronLeft className="h-4 w-4" />
+          <IconChevronLeft className="h-3.5 w-3.5" />
           Previous
-        </button>
+        </Button>
 
         <div className="flex items-center gap-1">
           {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -55,36 +56,32 @@ export function PaginationControls({ pagination }: PaginationControlsProps) {
               return (
                 <div key={p} className="flex items-center">
                   {showEllipsis && (
-                    <span className="px-2 text-xs text-muted-foreground">...</span>
+                    <span className="px-1.5 text-xs text-muted-foreground">...</span>
                   )}
-                  <button
-                    type="button"
+                  <Button
+                    variant={p === currentPage ? "default" : "outline"}
+                    size="icon-sm"
                     onClick={() => navigateToPage(p)}
-                    className={`h-8 w-8 rounded-lg text-xs font-semibold transition-colors ${
-                      p === currentPage
-                        ? "bg-primary text-primary-foreground shadow-xs"
-                        : "border border-muted bg-card text-primary hover:bg-secondary"
-                    }`}
+                    className="text-xs"
                   >
                     {p}
-                  </button>
+                  </Button>
                 </div>
               );
             })}
         </div>
 
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => navigateToPage(currentPage + 1)}
           disabled={!hasNextPage}
-          className="inline-flex items-center gap-1 rounded-lg border border-muted bg-card px-3 py-1.5 text-xs font-medium text-primary hover:bg-secondary disabled:opacity-40 disabled:pointer-events-none transition-colors"
-          aria-label="Next page"
+          className="gap-1 text-xs h-8"
         >
           Next
-          <IconChevronRight className="h-4 w-4" />
-        </button>
+          <IconChevronRight className="h-3.5 w-3.5" />
+        </Button>
       </div>
     </div>
   );
 }
-
