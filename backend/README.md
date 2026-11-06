@@ -14,6 +14,7 @@ This service follows a strict **Layered Architecture** adhering to **SOLID princ
 - **Domain Models (`src/models/`)**: Mongoose schemas declaring schema structure, data transformations, and explicit `schema.index` definitions.
 - **Dependency Injection (Composition Root in `src/app.ts`)**: Dependencies are injected via constructors (Controller <- Service <- Repository), eliminating global singletons and enabling unit testing and mocking.
 - **Rate Limiting Strategy Pattern (`src/middlewares/rate-limiter.middleware.ts`)**: Uses an `IRateLimiterStrategy` interface with `UpstashRateLimiterStrategy` (using `@upstash/ratelimit` & `@upstash/redis`) and `MemoryRateLimiterStrategy` (high-performance fallback for offline/test environments).
+- **Redis Caching Layer (`src/services/cache.service.ts`)**: Implements `ICacheService` with `UpstashCacheService` and `MemoryCacheService` fallback. Injected into `NoteService` to cache paginated note queries and single note lookups with automatic write-through cache invalidation.
 
 ---
 
