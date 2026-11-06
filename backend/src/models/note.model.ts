@@ -28,3 +28,4 @@ NoteSchema.index({ userId: 1, createdAt: -1 });
 NoteSchema.index({ createdAt: -1 });
 
 export const NoteModel = model<INoteDocument>("Note", NoteSchema);
+

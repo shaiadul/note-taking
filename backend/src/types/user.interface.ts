@@ -19,3 +19,4 @@ export interface IUserDocument extends IUser, Document {
 }
 
 export type SafeUser = Omit<IUser, "password">;
+

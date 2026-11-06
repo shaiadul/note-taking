@@ -28,3 +28,4 @@ PostSchema.index({ userId: 1, createdAt: -1 });
 PostSchema.index({ createdAt: -1 });
 
 export const PostModel = model<IPostDocument>("Post", PostSchema);
+

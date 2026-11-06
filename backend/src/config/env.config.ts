@@ -12,8 +12,17 @@ const envSchema = z.object({
   BCRYPT_SALT_ROUNDS: z.coerce.number().default(12),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().default(60000),
   RATE_LIMIT_MAX_REQUESTS: z.coerce.number().default(100),
-  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
-  UPSTASH_REDIS_REST_TOKEN: z.string().optional()
+  UPSTASH_REDIS_REST_URL: z
+    .string()
+    .url()
+    .optional()
+    .or(z.literal(""))
+    .transform((val) => (val === "" ? undefined : val)),
+  UPSTASH_REDIS_REST_TOKEN: z
+    .string()
+    .optional()
+    .or(z.literal(""))
+    .transform((val) => (val === "" ? undefined : val))
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
