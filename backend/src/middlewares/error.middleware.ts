@@ -39,7 +39,7 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
     return;
   }
 
-  logger.error({ err }, "Unhandled application error");
+  logger.error({ message: err.message }, "Unhandled application error");
 
   res.status(500).json({
     success: false,

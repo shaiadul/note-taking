@@ -6,6 +6,8 @@ import { NoteDialog } from "./note-dialog";
 import { PaginationControls } from "../pagination-controls";
 import { SearchFilter } from "../search-filter";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { IconPlus, IconNote } from "@tabler/icons-react";
 
 interface NotesViewProps {
@@ -46,9 +48,14 @@ export function NotesView({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-primary">
-            {user.role === "admin" ? "Platform Notes (Admin View)" : "My Encrypted Notes"}
-          </h1>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              {user.role === "admin" ? "Platform Notes" : "My Encrypted Notes"}
+            </h1>
+            <Badge variant={user.role === "admin" ? "default" : "secondary"}>
+              {user.role === "admin" ? "Admin View (All Users)" : "User Access"}
+            </Badge>
+          </div>
           <p className="mt-1 text-xs text-muted-foreground">
             {user.role === "admin"
               ? "As an Admin, you can review and manage notes across all registered accounts."
@@ -56,14 +63,14 @@ export function NotesView({
           </p>
         </div>
 
-        <button
-          type="button"
+        <Button
           onClick={handleCreate}
-          className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 transition-opacity shadow-xs"
+          size="sm"
+          className="self-start sm:self-auto gap-1.5 shadow-xs"
         >
           <IconPlus className="h-4 w-4" />
           Create Note
-        </button>
+        </Button>
       </div>
 
       <div className="flex items-center justify-between gap-4">
@@ -71,25 +78,26 @@ export function NotesView({
       </div>
 
       {filteredNotes.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-muted bg-card p-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card p-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-primary">
             <IconNote className="h-6 w-6" />
           </div>
-          <h3 className="mt-4 text-sm font-bold text-primary">No notes found</h3>
+          <h3 className="mt-4 text-sm font-bold text-foreground">No notes found</h3>
           <p className="mt-1 max-w-sm text-xs text-muted-foreground">
             {searchQuery
               ? `No notes match "${searchQuery}". Try a different keyword.`
               : "You haven't written any notes yet. Create your first note now!"}
           </p>
           {!searchQuery && (
-            <button
-              type="button"
+            <Button
               onClick={handleCreate}
-              className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-secondary px-3.5 py-2 text-xs font-semibold text-primary hover:bg-muted transition-colors"
+              variant="secondary"
+              size="sm"
+              className="mt-4 gap-1.5"
             >
               <IconPlus className="h-4 w-4" />
               Write First Note
-            </button>
+            </Button>
           )}
         </div>
       ) : (
@@ -110,4 +118,3 @@ export function NotesView({
     </div>
   );
 }
-

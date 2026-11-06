@@ -2,6 +2,8 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { IconSearch, IconX } from "@tabler/icons-react";
 
 interface SearchFilterProps {
@@ -18,7 +20,7 @@ export function SearchFilter({
   const searchParams = useSearchParams();
   const currentQuery = searchParams.get(paramKey) || "";
   const [searchTerm, setSearchTerm] = useState(currentQuery);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
@@ -40,27 +42,25 @@ export function SearchFilter({
 
   return (
     <div className="relative w-full max-w-sm">
-      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
-        <IconSearch className="h-4 w-4" />
-      </div>
-      <input
+      <Input
         type="text"
         value={searchTerm}
         onChange={(e) => handleSearch(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-muted bg-card py-2 pl-9 pr-9 text-xs text-primary placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+        className="h-9 text-xs pl-8 pr-8"
       />
+      <IconSearch className="pointer-events-none absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground select-none" />
       {searchTerm && (
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="icon-xs"
           onClick={clearSearch}
-          className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-primary"
           aria-label="Clear search"
+          className="absolute right-1 top-1.5 h-6 w-6 text-muted-foreground hover:text-foreground"
         >
-          <IconX className="h-4 w-4" />
-        </button>
+          <IconX className="h-3.5 w-3.5" />
+        </Button>
       )}
     </div>
   );
 }
-

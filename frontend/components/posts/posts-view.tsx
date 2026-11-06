@@ -6,6 +6,7 @@ import { PostDialog } from "./post-dialog";
 import { PaginationControls } from "../pagination-controls";
 import { SearchFilter } from "../search-filter";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { IconPlus, IconArticle } from "@tabler/icons-react";
 import Link from "next/link";
 
@@ -36,27 +37,28 @@ export function PostsView({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-primary">Public Community Feed</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            Public Community Feed
+          </h1>
           <p className="mt-1 text-xs text-muted-foreground">
             Explore thoughts, articles, and discussions posted publicly by platform users.
           </p>
         </div>
 
         {currentUser ? (
-          <button
-            type="button"
+          <Button
             onClick={() => setIsDialogOpen(true)}
-            className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 transition-opacity shadow-xs"
+            size="sm"
+            className="self-start sm:self-auto gap-1.5 shadow-xs"
           >
             <IconPlus className="h-4 w-4" />
             New Post
-          </button>
+          </Button>
         ) : (
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-lg border border-muted bg-card px-4 py-2 text-xs font-semibold text-primary hover:bg-secondary transition-colors"
-          >
-            Sign in to Post
+          <Link href="/login">
+            <Button variant="outline" size="sm" className="gap-1.5">
+              Sign in to Post
+            </Button>
           </Link>
         )}
       </div>
@@ -66,11 +68,11 @@ export function PostsView({
       </div>
 
       {filteredPosts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-muted bg-card p-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card p-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-primary">
             <IconArticle className="h-6 w-6" />
           </div>
-          <h3 className="mt-4 text-sm font-bold text-primary">No posts available</h3>
+          <h3 className="mt-4 text-sm font-bold text-foreground">No posts available</h3>
           <p className="mt-1 max-w-sm text-xs text-muted-foreground">
             {searchQuery
               ? `No posts matched "${searchQuery}".`
@@ -91,4 +93,3 @@ export function PostsView({
     </div>
   );
 }
-

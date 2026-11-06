@@ -13,10 +13,12 @@ describe("Secure Note-Taking Application API Suite", () => {
 
   beforeAll(async () => {
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(TEST_MONGO_URI);
+      await mongoose.connect(TEST_MONGO_URI, {
+        serverSelectionTimeoutMS: 30000
+      });
     }
     app = createApp();
-  });
+  }, 60000);
 
   beforeEach(async () => {
     await UserModel.deleteMany({});
