@@ -42,3 +42,4 @@ export class Database {
     logger.info("MongoDB connection closed");
   }
 }
+

@@ -48,3 +48,4 @@ export class TooManyRequestsError extends AppError {
     super(message, 429);
   }
 }
+

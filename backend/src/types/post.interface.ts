@@ -14,3 +14,4 @@ export interface IPostDocument extends IPost, Document {
   createdAt: Date;
   updatedAt: Date;
 }
+

@@ -14,3 +14,4 @@ export interface INoteDocument extends INote, Document {
   createdAt: Date;
   updatedAt: Date;
 }
+

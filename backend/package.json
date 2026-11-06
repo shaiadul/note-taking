@@ -2,10 +2,10 @@
   "name": "secure-note-taking-backend",
   "version": "1.0.0",
   "description": "Production-grade Secure Note-Taking API with RBAC, MongoDB Aggregations, Upstash Redis Rate Limiting, and Optimized Indexing",
-  "main": "dist/server.js",
+  "main": "src/server.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "tsx src/server.ts",
     "dev": "tsx watch src/server.ts",
     "test": "jest --runInBand --detectOpenHandles"
   },
