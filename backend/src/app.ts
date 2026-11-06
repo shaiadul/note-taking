@@ -11,6 +11,7 @@ import { PostRepository } from "./repositories/post.repository";
 import { AuthService } from "./services/auth.service";
 import { UserService } from "./services/user.service";
 import { NoteService } from "./services/note.service";
+import { CacheServiceFactory } from "./services/cache.service";
 import { PostService } from "./services/post.service";
 import { AggregationService } from "./services/aggregation.service";
 import { AuthController } from "./controllers/auth.controller";
@@ -42,10 +43,11 @@ export const createApp = (): Application => {
   const userRepository = new UserRepository();
   const noteRepository = new NoteRepository();
   const postRepository = new PostRepository();
+  const cacheService = CacheServiceFactory.create();
 
   const authService = new AuthService(userRepository);
   const userService = new UserService(userRepository);
-  const noteService = new NoteService(noteRepository);
+  const noteService = new NoteService(noteRepository, cacheService);
   const postService = new PostService(postRepository, userRepository);
   const aggregationService = new AggregationService(userRepository, postRepository);
 
